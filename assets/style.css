@@ -1,0 +1,4 @@
+body { background-color: #f8fafc; }
+.table-auto { width: 100%; }
+.sidebar-link { display: block; padding: .5rem 1rem; border-radius: .375rem; }
+.sidebar-link:hover { background-color: rgba(0,0,0,0.06); }
