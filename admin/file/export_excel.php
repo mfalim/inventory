@@ -1,14 +1,25 @@
 <?php
-include '../config/koneksi.php';
+include '../../config/koneksi.php';
 
 // Query data
 $q = mysqli_query($conn, "
     SELECT 
-        MONTH(tanggal) bulan,
-        (SELECT SUM(jumlah) FROM barang_masuk WHERE MONTH(tanggal)=MONTH(bm.tanggal)) masuk,
-        (SELECT SUM(jumlah) FROM barang_keluar WHERE MONTH(tanggal)=MONTH(bm.tanggal)) keluar
-    FROM barang_masuk bm GROUP BY MONTH(bm.tanggal)
+        bulan,
+        COALESCE(masuk, 0) AS masuk,
+        COALESCE(keluar, 0) AS keluar
+    FROM (
+        SELECT MONTH(tanggal) AS bulan, SUM(jumlah) AS masuk
+        FROM barang_masuk
+        GROUP BY MONTH(tanggal)
+    ) bm
+    LEFT JOIN (
+        SELECT MONTH(tanggal) AS bulan, SUM(jumlah) AS keluar
+        FROM barang_keluar
+        GROUP BY MONTH(tanggal)
+    ) bk USING (bulan)
+    ORDER BY bulan
 ");
+
 
 $filename = "laporan_barang.xls";
 $file = fopen($filename, "w");

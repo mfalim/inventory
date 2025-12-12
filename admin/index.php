@@ -1,4 +1,4 @@
 <?php
 // langsung masuk ke dashboard admin
-header('Location: admin/dashboard.php');
+header('Location: /inventory/admin/dashboard.php');
 exit;

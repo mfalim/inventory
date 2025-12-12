@@ -1,5 +1,5 @@
 <?php
-include '../config/koneksi.php';
+include '../../config/koneksi.php';
 
 $file = fopen("laporan.txt", "w");
 fwrite($file, "=== LAPORAN BARANG MASUK & KELUAR ===\n\n");
@@ -14,8 +14,8 @@ for ($i = 1; $i <= 12; $i++) {
 fclose($file);
 
 header("Content-Type: text/plain");
-header("Content-Disposition: attachment; filename=laporan_barang.txt");
-readfile("laporan_barang.txt");
-unlink("laporan_barang.txt");
+header("Content-Disposition: attachment; filename=laporan.txt");
+readfile("laporan.txt");
+unlink("laporan.txt");
 exit;
 ?>
