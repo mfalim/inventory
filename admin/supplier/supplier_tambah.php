@@ -5,8 +5,11 @@ include '../sidebar.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = mysqli_real_escape_string($conn, $_POST['nama_supplier']);
     $telp = mysqli_real_escape_string($conn, $_POST['no_telepon']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-
+    $email = $_POST['email'];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Email tidak valid!";
+        }
+        
     $insert = mysqli_query($conn, "INSERT INTO supplier (nama_supplier,no_telepon,email)
                                   VALUES ('$nama','$telp','$email')");
 
