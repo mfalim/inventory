@@ -10,23 +10,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['id']);
     $nama = mysqli_real_escape_string($conn, $_POST['nama_supplier']);
     $telp = mysqli_real_escape_string($conn, $_POST['no_telepon']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = $_POST['email'];
 
-    $update = mysqli_query($conn, "
-        UPDATE supplier SET
-        nama_supplier='$nama',
-        no_telepon='$telp',
-        email='$email'
-        WHERE id=$id
-    ");
-
-    if ($update) {
-        echo "<script>alert('Data supplier berhasil diperbarui'); window.location='supplier.php';</script>";
+    // Validasi email PHP
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Email Tidak Valid',
+            text: 'Format email harus benar dan mengandung @'
+        });
+        </script>";
     } else {
-        echo "<script>alert('Gagal memperbarui data');</script>";
+
+        $email = mysqli_real_escape_string($conn, $email);
+
+        $update = mysqli_query($conn, "
+            UPDATE supplier SET
+                nama_supplier='$nama',
+                no_telepon='$telp',
+                email='$email'
+            WHERE id=$id
+        ");
+
+        if ($update) {
+            echo "
+            <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data supplier berhasil diperbarui.'
+            }).then(() => {
+                window.location='supplier.php';
+            });
+            </script>";
+        } else {
+            echo "
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Gagal memperbarui data supplier.'
+            });
+            </script>";
+        }
     }
 }
 ?>
+
 
 <h1 class="text-2xl font-semibold">Edit Supplier</h1>
 <form action="" method="post" class="mt-4 bg-white p-4 rounded shadow max-w-lg">

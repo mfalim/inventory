@@ -6,20 +6,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = mysqli_real_escape_string($conn, $_POST['nama_supplier']);
     $telp = mysqli_real_escape_string($conn, $_POST['no_telepon']);
     $email = $_POST['email'];
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Email tidak valid!";
-        }
-        
-    $insert = mysqli_query($conn, "INSERT INTO supplier (nama_supplier,no_telepon,email)
-                                  VALUES ('$nama','$telp','$email')");
 
-    if ($insert) {
-        echo "<script>alert('Supplier berhasil ditambahkan'); window.location='supplier.php';</script>";
+    // Validasi email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Email Tidak Valid',
+            text: 'Email harus mengandung @ dan format yang benar!'
+        });
+        </script>";
     } else {
-        echo "<script>alert('Gagal menambahkan supplier');</script>";
+        $email = mysqli_real_escape_string($conn, $email);
+
+        $insert = mysqli_query(
+            $conn,
+            "INSERT INTO supplier (nama_supplier, no_telepon, email)
+             VALUES ('$nama', '$telp', '$email')"
+        );
+
+        if ($insert) {
+            echo "
+            <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Supplier berhasil ditambahkan!',
+            }).then(() => {
+                window.location='supplier.php';
+            });
+            </script>";
+        } else {
+            echo "
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Gagal menambahkan supplier!'
+            });
+            </script>";
+        }
     }
 }
 ?>
+
+
 
 <div>
     <h1 class="text-2xl font-semibold">Tambah Supplier</h1>

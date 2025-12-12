@@ -12,16 +12,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $harga = intval($_POST['harga']);
     $satuan = mysqli_real_escape_string($conn, $_POST['satuan']);
 
-    $insert = mysqli_query($conn, "INSERT INTO barang (nama_barang, kategori_id, stok, harga, satuan)
-                                   VALUES ('$nama','$kategori_id','$stok','$harga','$satuan')");
+    $insert = mysqli_query($conn, "
+        INSERT INTO barang (nama_barang, kategori_id, stok, harga, satuan)
+        VALUES ('$nama','$kategori_id','$stok','$harga','$satuan')
+    ");
 
     if ($insert) {
-        echo "<script>alert('Barang berhasil ditambahkan'); window.location='barang.php';</script>";
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Barang berhasil ditambahkan!'
+        }).then(() => {
+            window.location = 'barang.php';
+        });
+        </script>";
     } else {
-        echo "<script>alert('Gagal menambahkan barang');</script>";
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal menambahkan barang.'
+        });
+        </script>";
     }
 }
 ?>
+
 
 <div>
     <h1 class="text-2xl font-semibold">Tambah Barang</h1>
@@ -45,7 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="number" name="harga" class="border p-2 w-full mt-2" required>
 
         <label class="block mt-4">Satuan</label>
-        <input type="text" name="satuan" class="border p-2 w-full mt-2" required>
+        <select name="satuan" class="border p-2 w-full mt-2" required>
+            <option value="">-- Pilih Satuan --</option>
+            <option value="pcs">Pcs</option>
+            <option value="kg">Kg</option>
+            <option value="liter">Liter</option>
+        </select>
 
         <button class="mt-4 px-4 py-2 bg-green-600 text-white rounded">Simpan</button>
     </form>
