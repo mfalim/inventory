@@ -6,8 +6,32 @@ $id = intval($_GET['id']);
 $delete = mysqli_query($conn, "DELETE FROM barang WHERE id=$id");
 
 if ($delete) {
-    echo "<script>alert('Barang berhasil dihapus'); window.location='barang.php';</script>";
+    echo "
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Barang berhasil dihapus',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => {
+            window.location = 'barang.php';
+        });
+    </script>
+    ";
 } else {
-    echo "<script>alert('Gagal menghapus barang'); window.location='barang.php';</script>";
+    echo "
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal Menghapus Barang',
+            showConfirmButton: true,
+            timer: 1500
+        }).then(() => {
+            window.location = 'barang.php';
+        });
+    </script>
+    ";
 }
 ?>

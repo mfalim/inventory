@@ -12,16 +12,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $harga = intval($_POST['harga']);
     $satuan = mysqli_real_escape_string($conn, $_POST['satuan']);
 
-    $insert = mysqli_query($conn, "INSERT INTO barang (nama_barang, kategori_id, stok, harga, satuan)
-                                   VALUES ('$nama','$kategori_id','$stok','$harga','$satuan')");
+    $insert = mysqli_query($conn, "
+        INSERT INTO barang (nama_barang, kategori_id, stok, harga, satuan)
+        VALUES ('$nama','$kategori_id','$stok','$harga','$satuan')
+    ");
 
     if ($insert) {
-        echo "<script>alert('Barang berhasil ditambahkan'); window.location='barang.php';</script>";
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Barang berhasil ditambahkan!'
+        }).then(() => {
+            window.location = 'barang.php';
+        });
+        </script>";
     } else {
-        echo "<script>alert('Gagal menambahkan barang');</script>";
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal menambahkan barang.'
+        });
+        </script>";
     }
 }
 ?>
+
 
 <div>
     <h1 class="text-2xl font-semibold">Tambah Barang</h1>

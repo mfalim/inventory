@@ -30,9 +30,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     if ($update) {
-        echo "<script>alert('Data berhasil diupdate'); window.location='barang.php';</script>";
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Barang berhasil diubah!'
+        }).then(() => {
+            window.location = 'barang.php';
+        });
+        </script>";
     } else {
-        echo "<script>alert('Gagal update');</script>";
+        echo "
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal mengubah barang.'
+        });
+        </script>";
     }
 }
 ?>

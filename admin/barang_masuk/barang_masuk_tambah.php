@@ -2,7 +2,6 @@
 include '../../config/koneksi.php';
 include '../sidebar.php';
 
-// proses simpan saat submit POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $barang_id = $_POST['barang_id'];
     $supplier_id = $_POST['supplier_id'];
@@ -10,23 +9,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tanggal = $_POST['tanggal'];
     $keterangan = $_POST['keterangan'];
 
-    // insert data ke log barang masuk
-    mysqli_query($conn, "INSERT INTO barang_masuk (barang_id, supplier_id, jumlah, tanggal, keterangan) 
+    $insert = mysqli_query($conn, "INSERT INTO barang_masuk (barang_id, supplier_id, jumlah, tanggal, keterangan) 
                          VALUES('$barang_id','$supplier_id','$jumlah','$tanggal','$keterangan')");
 
-    // update stok barang
     mysqli_query($conn, "UPDATE barang SET stok = stok + $jumlah WHERE id='$barang_id'");
 
-    echo "<script>
-            alert('Barang masuk berhasil ditambahkan!');
-            window.location='barang_masuk.php';
-          </script>";
+    $sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
+    $order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
+
+    $allowed_sort = ['id', 'nama_barang', 'stok', 'harga', 'nama_kategori'];
+
+    if (!in_array($sort, $allowed_sort)) {
+        $sort = 'id';
+    }
+
+    $order = ($order === 'asc') ? 'ASC' : 'DESC';
+
+    if ($insert) {
+        echo "
+            <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Barang berhasil ditambahkan!',
+            }).then(() => {
+                window.location='barang_masuk.php';
+            });
+            </script>";
+    } else {
+        echo "
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Gagal Menambahkan Barang!',
+            }).then(() => {
+                window.location='barang_masuk.php';
+            });
+            </script>";
+    }
     exit;
 }
 
-// data barang
 $barang = mysqli_query($conn, "SELECT * FROM barang");
-// data supplier
 $supplier = mysqli_query($conn, "SELECT * FROM supplier");
 ?>
 

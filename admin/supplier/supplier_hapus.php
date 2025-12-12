@@ -1,12 +1,36 @@
 <?php
 include '../../config/koneksi.php';
+include '../sidebar.php';
 
 $id = intval($_GET['id']);
 $delete = mysqli_query($conn, "DELETE FROM supplier WHERE id=$id");
 
 if ($delete) {
-    echo "<script>alert('Supplier berhasil dihapus'); window.location='supplier.php';</script>";
+    echo "
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Supplier berhasil dihapus',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => {
+            window.location = 'supplier.php';
+        });
+    </script>
+    ";
 } else {
-    echo "<script>alert('Gagal menghapus supplier'); window.location='supplier.php';</script>";
+    echo "
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal menghapus supplier',
+            showConfirmButton: true
+        }).then(() => {
+            window.location = 'supplier.php';
+        });
+    </script>
+    ";
 }
 ?>

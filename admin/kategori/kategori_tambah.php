@@ -7,9 +7,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $insert = mysqli_query($conn, "INSERT INTO kategori (nama_kategori) VALUES ('$nama')");
 
     if ($insert) {
-        echo "<script>alert('Kategori berhasil ditambahkan'); window.location='kategori.php';</script>";
+        echo "
+            <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Kategori berhasil ditambahkan!',
+            }).then(() => {
+                window.location='kategori.php';
+            });
+            </script>";
     } else {
-        echo "<script>alert('Gagal menambahkan kategori');</script>";
+        echo "
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Gagal Menambahkan Kategori!',
+            }).then(() => {
+                window.location='kategori.php';
+            });
+            </script>";
     }
 }
 ?>

@@ -15,9 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update = mysqli_query($conn, "UPDATE kategori SET nama_kategori='$nama' WHERE id=$id");
 
     if ($update) {
-        echo "<script>alert('Data berhasil diupdate'); window.location='kategori.php';</script>";
+        echo "
+            <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Kategori berhasil diubah!',
+            }).then(() => {
+                window.location='kategori.php';
+            });
+            </script>";
     } else {
-        echo "<script>alert('Gagal update');</script>";
+        echo "
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Gagal Mengubah Kategori!',
+            }).then(() => {
+                window.location='kategori.php';
+            });
+            </script>";
     }
 }
 ?>
